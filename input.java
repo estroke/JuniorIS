@@ -1,3 +1,4 @@
+
 import java.awt.image.BufferedImage;
 //import for images
 import java.io.File;
@@ -9,11 +10,11 @@ import javax.imageio.ImageIO;
 //image imports
 import javax.swing.*;
 //output extension
-import java.awt.image.RescaleOp;
+//import java.awt.image.RescaleOp;
 
 public class input {
 
-        public static void main(String[] args){
+    public static void main(String[] args){
             BufferedImage image = null;
             try {
                 //reads in the image from the file extension
@@ -35,6 +36,7 @@ public class input {
             jFrame.add(jLabel);
             jFrame.setVisible(true);
 
+
             //code to add buttons which will soon be able to edit the pictures
             // JButton button = new JButton();
             // button.setText("Button");
@@ -42,14 +44,9 @@ public class input {
             
             // //setting parameters to close the image
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  
     }
     // class edit image: darken
-        public static void darkenImage (BufferedImage image) {
-            RescaleOp op = new RescaleOp(.9f, 0, null);
-            image = op.filter(image, null);
-            //code here to click button to activate change
-        }
 }
+
 // class edit image: increase shadows
 // class edit image: increase contrast
