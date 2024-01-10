@@ -36,7 +36,6 @@ public class imageAnimation{
         int width;
         int height;
         BufferedImage part;
-        BufferedImage scaledImage;
 
     
 
@@ -83,95 +82,57 @@ public class imageAnimation{
         //one time for entire image
         try {
             img.populateImage(file);
-            
-            imageSegmentation.regionalGrowth(img.image, 3000, 100,30);
+            imageSegmentation.regionalGrowth(img.image, 1000, 100,50);
+            //imageProcessing.Brightness(imageSegmentation.region, img.image, 100);
             
             
         } catch (IOException e) {
             
         }
 
-
-        AffineTransform at = new AffineTransform();
-        at.scale(.3,.3);
-        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        width = img.image.getWidth();
+        height = img.image.getHeight();
         
 
-        // delayed timer function is from https://stackoverflow.com/questions/5525176/java-simple-timertask-for-each-value-of-array
+        //adding the image effects after a certain delay. seamless insertion into img.image, allows for the image to
+        //keep moving even after the image changes
+        final Timer changeImageTimer = new Timer();
+        changeImageTimer.scheduleAtFixedRate(new TimerTask() {
 
-        //
-        // final Timer changeImageTimer = new Timer();
-        // changeImageTimer.scheduleAtFixedRate(new TimerTask() {
-
-
-            
-        //     public void run() {
-
-        //     }
-        // }, width, height);
-
-
-        final Timer animationTimer = new Timer();
-        animationTimer.scheduleAtFixedRate(new TimerTask() {
-            
-            float x = .5f;
-            int a,b = 0;
-            //int i = 1;
-
+            float x = 1;
             
             public void run() {
                 
-                
-                    //  try {
-                    //      //getting sky pixels
-                    //      //populating both public image and region array with arrays of pixels
-                    //      newImage.threshold(imgFile1, 200);
-                    //      newImage1.Brightness(newImage, i);
-                    // } catch (IOException e) {
-                    // }
-                    
-                    //i = i - 2;
-                    
-                    // try {
-                    try {
-                        imageProcessing.Brightness(imageSegmentation, img.image, x);
+                try {
+                        imageProcessing.Brightness(imageSegmentation.region, img.image, x);
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    scaledImage = scaleOp.filter(img.image, scaledImage);
-                    width = scaledImage.getWidth();
-                    height = scaledImage.getHeight();
-                    //     newImage1.Brightness(newImage,i);
-                    //     //can we move this up and use the whole image at once?
-                        
-                    // } catch (IOException e) {
-                        
-                    // }
-                    
-                    part = scaledImage.getSubimage(a,b, width - a, height - b);
-                    
-                    
-                    // // transform it 
-                    //Image image = imageIcon.getImage(); 
-                    //Image newimg = part.getScaledInstance((width/4), (height/4),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                    ImageIcon img = new ImageIcon(part);
-                    jLabel.setIcon(img);
-                    
-                    //if (a)
-                    a = a +10;
-                    
-                    //b++;
-                    
-                    //i++;
-                    //resets the array after the last image has been shown 
-                    //for continuity
-                    x = (x + .1f);
-                    // if (x >= 2) {
-                    //     x = .1f;
-                    // }
+                    System.out.println("I'm here with imageChangeTimer");
+                    x = x + 5;
             }
-        }, 500L, 100L);
+        }, 5000L, 8000L);
+
+        //the L is for long so 2000L means 2 seconds
+
+        final Timer animationTimer = new Timer();
+        animationTimer.scheduleAtFixedRate(new TimerTask() {            
+            
+            int a,b = 0;
+
+            public void run() {
+                
+
+                part = img.image.getSubimage(a,b, width - a, height - b);
+                
+                ImageIcon newimg = new ImageIcon(part);
+                jLabel.setIcon(newimg);
+                    
+                a = a + 2; 
+                System.out.println("I'm here with animationTimer");
+            }
+        }, 1000L, 100L);
     }
 
 }
