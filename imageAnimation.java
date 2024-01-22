@@ -103,11 +103,14 @@ public class imageAnimation{
         //one time for entire image
         try {
             img.populateImage(file);
-            imageSegmentation.regionalGrowth(img.image, 721,241,30);
+            imageSegmentation.regionalGrowth(img.image, 921,141,50);
+            //try a threshold search with a short upper bound
             imageProcessing.simpleTranslation(imageSegmentation.region, img.image);
             System.out.println(imageProcessing.newRegion.size());
             //imageProcessing.Brightness(imageSegmentation.region, img.image, 100);
-            
+            // 721,241,30 trees
+            // 721,641,30 grass
+            // 921,141,50 sky
             
         } catch (IOException e) {
             
@@ -123,61 +126,41 @@ public class imageAnimation{
                 updateGlobalVariable();
                 System.out.println("Global Variable: " + newX);
 
-                if (newX >= 20) {
+                if (newX >= 2) {
                     // When the threshold for increasing is reached, start decreasing
                     movingForward = false;
-                } else if (newX <= 0) {
+                } else if (newX <= -2) {
                     // When the threshold for decreasing is reached, start increasing again
                     movingForward = true;
                 }
             }
         }, 0L, 1000L);
 
-        //adding the image effects after a certain delay. seamless insertion into img.image, allows for the image to
-        //keep moving even after the image changes
+        //timer to allow for translations/movement of pixels on a timer. tied to either a random array of
+        //pixels or can use the image processing region.
         final Timer changeImageTimer = new Timer();
         changeImageTimer.scheduleAtFixedRate(new TimerTask() {
 
-            //float x = 1;
-            //int newX = 5;
-
-            //imageProcessing.simpleTranslation(imageSegmentation.region, img.image);
-            //int j = 0;
             public void run() {
                 System.out.println(imageProcessing.newRegion.size());
 
-                for (int[] coordinates:imageProcessing.newRegion) {
+                for (int[] coordinates:imageSegmentation.region) {
                     //int[] coordinates = imageProcessing.newRegion.get(j);
                     int startX = coordinates[0];
                     int startY = coordinates[1];
                     int pixel = img.image.getRGB(startX,startY);
-                    System.out.println(startX);
+                    //System.out.println(startX);
                     //img.image.setRGB(startX,startY,255);
                     startX = startX + newX;
-                    //imageProcessing.newRegion.remove(coordinates);
-                    //imageProcessing.newRegion.add(new int[] {startX,startY});
-                    System.out.println(startX);
 
-                    
-                    //newRegion.add(j);
                     if (startX < img.image.getWidth() && startX >= 0) {
                         img.image.setRGB(startX,startY,pixel);
                     }
-                    //j++;
                 }
-                
-                
-                
-                //imageProcessing.newRegion.size();
                 System.out.println("I'm here with imageChangeTimer");
-                    //x = x + 5;
             }
          
         }, 0L, 1000L);
-        
-
-        
-        
 
         //the L is for long so 2000L means 2 seconds
 
@@ -193,7 +176,7 @@ public class imageAnimation{
                     
                 a = a + 2; 
                 running = true;
-                //System.out.println("I'm here with animationTimer");
+                System.out.println("I'm here with animationTimer");
             }
         };
         animationTimer.scheduleAtFixedRate(task, 0, 80);
@@ -221,34 +204,5 @@ public class imageAnimation{
         //     }
         // });
     }
-
-    // boolean increasing = true;
-    //             int threshold = 40;
-    //             for (int i = 0; i < imageProcessing.newRegion.size(); i++) { 
-    //                 int[] array = imageProcessing.newRegion.get(i);
-    //                 int x = array[0];
-    //                 int y = array[1];
-    //                 //System.out.println(x);
-    //                 //System.out.println(y);
-
-    //                 int pixel = img.image.getRGB(x,y);
-    //                 img.image.setRGB(x,y,192);
-    //                 img.image.setRGB((x + imageProcessing.xOffset), y, 255);
-    //                 if (imageProcessing.xOffset >= threshold) {
-    //                     // When the threshold is reached, start decreasing the number
-    //                     increasing = false;
-    //                 }
-
-    //                 if (imageProcessing.xOffset <= 0) {
-    //                     // When the number becomes zero, reset and start increasing again
-    //                     increasing = true;
-    //                 }
-    //                 if (increasing) {
-    //                     imageProcessing.xOffset++;
-    //                 } else {
-    //                     imageProcessing.xOffset--;
-    //                 }
-    //             }
-    
 
 }
