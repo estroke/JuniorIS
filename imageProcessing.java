@@ -14,16 +14,23 @@ import javax.swing.*;
 // //java exceptions
 import javax.imageio.ImageIO;
 
+import java.util.ArrayList;
 //import java.util.ArrayList;
 import java.util.Arrays;
 // //image imports
 //import javax.swing.*;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class imageProcessing {
         //File input = new File("/Users/elliestroke/Desktop/algorithm analysis/JuniorIS/happy-cottage.jpeg");
         
-        //public List<int[]> region = new ArrayList<>();
-        
+        public List<int[]> newRegion = new ArrayList<>();
+        int xOffset = 21;
         //ActionListener listener;
         
 
@@ -99,13 +106,13 @@ public class imageProcessing {
     //passing an instance of the segmentation class with the region of pixels populated
 
     //testing class to access pixels in the imageSegmentation region array
-    public void Brightness(imageSegmentation newInstance,BufferedImage image, float brightnessValue) throws IOException {
+    public void Brightness(List<int[]> region, BufferedImage image, float brightnessValue) throws IOException {
 
        
 
-        for (int i = 0; i < newInstance.region.size(); i++) {
+        for (int i = 0; i < region.size(); i++) {
             //accessing each x and y value from the region list of arrays[x,y]
-                int[] array = newInstance.region.get(i);
+                int[] array = region.get(i);
                 int x = array[0];
                 int y = array[1];
 
@@ -172,6 +179,26 @@ public class imageProcessing {
                 image.setRGB(a, b, new Color(reds[4],greens[4],blues[4]).getRGB());
             }
         }
+    }
+    public void simpleTranslation(List<int[]> region, BufferedImage image) throws IOException {
+
+        Random rand = new Random();
+        //int width = image.getWidth();
+        //int height = image.getHeight();
+        //List<int[]> arrayRand = new ArrayList<>();
+        int size = region.size();
+        //int num = 1;
+        
+        
+        for (int i = 0;i<5000;i++) {
+            int randomNum = rand.nextInt(size - 1);
+            //arrayRand.add(region.get(randomNum));
+            newRegion.add(region.get(randomNum));
+        }
+        
+        
+        
+
     }
 }
 
